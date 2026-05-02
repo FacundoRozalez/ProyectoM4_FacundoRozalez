@@ -1,2 +1,2 @@
 # FacundoRozalez-ProyectoM4_FacundoRozalez
-Aplicación de gestión de tareas para la startup MateCode. Desarrollada con React, TypeScript, Firebase (Auth/Firestore) y AWS SES. 
+App corporativa de gestión de tareas desarrollada con React + TypeScript y servicios administrados (Firebase/AWS). 
