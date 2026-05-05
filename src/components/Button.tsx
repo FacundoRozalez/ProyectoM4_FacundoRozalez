@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Definimos las variantes para cumplir con buenos estándares de UI
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'danger' | 'secondary' | 'success';

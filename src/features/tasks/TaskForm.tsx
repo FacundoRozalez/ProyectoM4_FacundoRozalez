@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Priority } from '../../types';
+import { validateTaskInput } from '../../utils/validation';
 
 interface TaskFormProps {
   onAdd: (title: string, description: string, priority: Priority, dueDate: string) => void;
@@ -10,14 +11,19 @@ export const TaskForm = ({ onAdd }: TaskFormProps) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
   const [dueDate, setDueDate] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    const validation = validateTaskInput({ title, dueDate });
 
+    if (!validation.valid) {
+      setError(Object.values(validation.errors)[0] || 'Revisa los datos del formulario.');
+      return;
+    }
+
+    setError('');
     onAdd(title, description, priority, dueDate);
-    
-    // Limpiar formulario
     setTitle('');
     setDescription('');
     setPriority('medium');
@@ -40,7 +46,6 @@ export const TaskForm = ({ onAdd }: TaskFormProps) => {
           placeholder="Título de la tarea"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
           style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
         />
       </div>
@@ -78,6 +83,12 @@ export const TaskForm = ({ onAdd }: TaskFormProps) => {
           />
         </div>
       </div>
+
+      {error && (
+        <div style={{ color: '#c53030', marginBottom: '12px', fontSize: '14px' }} role="alert">
+          {error}
+        </div>
+      )}
 
       <button type="submit" style={{ 
         width: '100%', 

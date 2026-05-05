@@ -52,3 +52,32 @@ input:focus, textarea:focus, select:focus {
 [data-sortable-item] {
   touch-action: none;
 }
+
+
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e0; /* Borde gris claro */
+  border-radius: 4px;
+  background-color: #ffffff; /* Fondo blanco cuando está vacío */
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox:checked {
+  background-color: #38a169; /* Tu verde de completado */
+  border-color: #38a169;
+}
+
+/* Este es el truco para que aparezca el tilde nativo sobre nuestro fondo */
+.custom-checkbox:checked::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  background-color: white; /* El color del tilde */
+}

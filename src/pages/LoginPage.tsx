@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, loginWithGoogle } from '../services/authServices';
+import { AuthLayout } from '../components/AuthLayout';
+import { AuthInput } from '../components/AuthInput';
+import { AuthButton } from '../components/AuthButton';
+import { validateAuthInput } from '../utils/validation';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -11,64 +15,33 @@ export const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const validation = validateAuthInput(email, password);
+    if (!validation.valid) {
+      setError(Object.values(validation.errors)[0] || 'Revisa los datos del formulario.');
+      return;
+    }
+
     try {
       await loginUser(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      // Manejo claro de errores (requisito de la rúbrica)
-      setError('Credenciales inválidas o usuario no encontrado.');
-    }
-  };
-
-  const handleGoogle = async () => {
-    try {
-      await loginWithGoogle();
-      navigate('/dashboard');
-    } catch (err: any) {
-      setError('Error al conectar con Google.');
+      setError('Correo o contraseña incorrectos.');
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-      <h2>Iniciar Sesión - MateCode</h2>
-      {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
-      
+    <AuthLayout title="Iniciar Sesión - MateCode" error={error}>
       <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Email:</label><br />
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label>Contraseña:</label><br />
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-          Entrar
-        </button>
+        <AuthInput label="Email" type="email" value={email} placeholder="tu@correo.com" onChange={(e) => setEmail(e.target.value)} />
+        <AuthInput label="Contraseña" type="password" value={password} placeholder="Tu contraseña" onChange={(e) => setPassword(e.target.value)} />
+        <AuthButton type="submit" color="#28a745">Entrar</AuthButton>
       </form>
-
-      <div style={{ textAlign: 'center', margin: '15px 0' }}>ó</div>
-
-      <button onClick={handleGoogle} style={{ width: '100%', padding: '10px', backgroundColor: '#db4437', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-        Entrar con Google
-      </button>
-
-      <p style={{ marginTop: '15px', textAlign: 'center' }}>
-        ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+      <div style={{ textAlign: 'center', margin: '20px 0', color: '#666', fontSize: '14px' }}>ó</div>
+      <AuthButton color="#db4437" onClick={loginWithGoogle}>Entrar con Google</AuthButton>
+      <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px' }}>
+        ¿No tienes cuenta? <Link to="/register" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>Regístrate aquí</Link>
       </p>
-    </div>
+    </AuthLayout>
   );
 };

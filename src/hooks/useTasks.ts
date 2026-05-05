@@ -66,9 +66,9 @@ export const useTasks = () => {
     }
   };
 
-  const toggleTaskStatus = async (taskId: string, currentStatus: boolean) => {
+  const toggleTaskStatus = async (taskId: string, newStatus: boolean) => {
     try {
-      await updateTask(taskId, { completed: !currentStatus });
+      await updateTask(taskId, { completed: newStatus });
       // Ya NO necesitás el setTasks manual, Firebase avisa del cambio
     } catch (err) {
       setError('No se pudo actualizar la tarea');
