@@ -116,7 +116,7 @@ VERCEL_URL=tu_url_produccion
 El envío de emails se realiza de forma segura sin exponer secretos en el frontend:
 
 1. El usuario hace clic en "Enviar Resumen por Email" en el dashboard.
-2. Se invoca una Vercel Function (`functions/send-mail.js`) que recibe el userId y el resumen de tareas.
+2. Se invoca una Vercel Function (`functions/send-email.js`) que recibe el userId y el resumen de tareas.
 3. La función serverless consulta Firestore para obtener las tareas del usuario.
 4. Usa AWS SES para enviar el email desde una dirección configurada.
 5. El email incluye un resumen HTML con el estado de todas las tareas.
