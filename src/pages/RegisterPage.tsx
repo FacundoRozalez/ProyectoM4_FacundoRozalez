@@ -31,15 +31,45 @@ export const RegisterPage = () => {
     }
   };
 
+  const handleGoogleRegister = async () => {
+    setError('');
+    try {
+      await loginWithGoogle();
+      navigate('/dashboard'); // Redirige tras éxito con Google
+    } catch (err: any) {
+      console.error(err);
+      setError('No se pudo registrar con Google.');
+    }
+  };
+
   return (
     <AuthLayout title="Crear Cuenta en MateCode" error={error}>
       <form onSubmit={handleRegister}>
-        <AuthInput label="Email" type="email" value={email} placeholder="ejemplo@correo.com" onChange={(e) => setEmail(e.target.value)} />
-        <AuthInput label="Contraseña" type="password" value={password} placeholder="Mínimo 6 caracteres" onChange={(e) => setPassword(e.target.value)} />
+        <AuthInput 
+          label="Email" 
+          type="email" 
+          value={email} 
+          placeholder="ejemplo@correo.com" 
+          onChange={(e) => setEmail(e.target.value)} 
+          autoComplete="email"
+        />
+        <AuthInput 
+          label="Contraseña" 
+          type="password" 
+          value={password} 
+          placeholder="Mínimo 6 caracteres" 
+          onChange={(e) => setPassword(e.target.value)} 
+          autoComplete="new-password" 
+        />
         <AuthButton type="submit" color="#007bff">Registrarse</AuthButton>
       </form>
+
       <div style={{ textAlign: 'center', margin: '20px 0', color: '#666', fontSize: '14px' }}>ó</div>
-      <AuthButton color="#db4437" onClick={loginWithGoogle}>Registrarse con Google</AuthButton>
+      
+      <AuthButton color="#db4437" onClick={handleGoogleRegister}>
+        Registrarse con Google
+      </AuthButton>
+
       <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px' }}>
         ¿Ya tienes cuenta? <Link to="/login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>Inicia sesión</Link>
       </p>
